@@ -1,0 +1,151 @@
+#file{
+    display: none;
+}
+.container {
+	width: 600px;
+	margin: 0 auto;
+	font-family: 'Arial', sans-serif;
+	background-color: #f7f7f7;
+	border-radius: 4px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.table1{
+	width: 565px;
+}
+.table2 {
+	width: 565px;
+}
+#win {
+    width: 35px;
+}
+#lose {
+    width: 35px;
+}
+input[id^="warn"] {
+    width: 40px; 
+}
+#level{
+    width: 55px;
+}
+h1 {
+	text-align: center;
+	padding: 50px;
+}
+
+table {
+	text-align: center;
+	border-collapse: collapse;
+}
+
+th {
+	text-align: center;
+	background-color: #eaeaea;
+	color: #333;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="reset"]:focus {
+	border-color: #c8220f;
+}
+
+input[type="button"] {
+	padding: 8px 16px;
+	background-color: #c8220f;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+input[type="button"]:hover {
+	background-color: #c8220f;
+}
+
+.doubleChk {
+	background-color: #008cba;
+}
+
+.message {
+	font-style: italic;
+	color: #ff0000;
+}
+
+.successPhoneChk {
+	color: #c8220f;
+	font-weight: bold;
+}
+
+.btn {
+	padding: 20px;
+	text-align: center;
+}
+
+#emselect {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	outline: none;
+	transition: border-color 0.3s;
+}
+textarea {
+    width: 549px;
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.button1 {
+	padding: 8px 16px;
+	background-color: #c8220f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button2 {
+	padding: 10px 20px;
+	background-color: gray;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-top: 10px;
+	transition: background-color 0.3s;
+}
+
+.red {
+	padding: 10px 20px;
+	background-color: #c8220f;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-top: 10px;
+	transition: background-color 0.3s;
+}
+
+/* button{
+	padding: 8px 16px;
+    background-color: gray;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+} */
+
+.textarea {
+	width : 750px;
+	height:200px;
+}
+warn{
+	text-align: center;
+}
+
+/* .button2:active {
+	background-color: #c8220f;	
+} */

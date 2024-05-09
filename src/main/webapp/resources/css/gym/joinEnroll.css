@@ -1,0 +1,102 @@
+#joinEnroll {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 90%;
+	margin: 0 auto;
+}
+
+#joinEnroll_describe {
+	text-align: center;
+	width: 700px;
+}
+
+#joinEnroll_joinPart {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#joinEnroll_joinPart #table {
+	padding: 20px;
+}
+
+#joinEnroll_joinPart #image {
+	padding: 20px;
+}
+
+#joinEnroll_joinPart table {
+	width: 550px;
+}
+
+#joinEnroll h1 {
+	color: blue;
+}
+
+#joinEnroll h2 {
+	color: red;
+}
+
+#joinEnroll th {
+	height: 40px;
+	font-weight: normal;
+}
+
+#joinEnroll input {
+	width: 200px;
+	height: 25px;
+}
+
+#joinEnroll #button {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#joinEnroll input::placeholder {
+	font-size: 12px;
+}
+
+#joinEnroll #gymAddress, #joinEnroll #gymDetailaddress {
+	width: 400px;
+}
+
+#joinEnroll #addressButton, #joinEnroll #submitButton, #joinEnroll #resetButton
+	{
+	color: white;
+	background-color: rgb(100, 80, 170);
+	border: 0 solid white;
+	padding: 5px 5px;
+	width: 70px;
+	height: 30px;
+}
+
+#submitButton {
+	margin-right: 10px;
+}
+
+#menuNav {
+	margin-left: 63%;
+}
+
+.menuButton {
+	background-color: window;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 15px;
+	font-size: large;
+}
+
+.menuButton {
+	margin-left: 30px; /* 원하는 간격 크기를 설정합니다 */
+}
+
+.menuButton:hover {
+	background-color: orange;
+	color: white;
+	font-weight: bold;
+}

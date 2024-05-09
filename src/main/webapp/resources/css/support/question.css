@@ -1,0 +1,187 @@
+body {
+	width: 90%;
+	margin: 0 auto;
+}
+
+#question {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#mainTitle {
+	width: 1300px;
+	text-align: center;
+}
+
+#question #questionTable th {
+	text-align: right;
+	height: 50px;
+}
+
+#questionButton {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-top: 20px;
+}
+
+#questionButton button {
+	width: 100px;
+	height: 70px;
+	border-width: 0px;
+	border-radius: 30px;
+	margin-inline: 10px;
+}
+
+#lower-option {
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#questionButton button:hover {
+	background-color: black;
+	color: rgb(239,239,239);
+}
+
+#question #listTable th {
+	font-size: 20px;
+	font-weight: normal;
+	height: 50px;
+	color: white;
+	background-color: tomato;
+}
+#question #listTable {
+	width: 1300px;
+}
+
+#question #listTable td {
+	text-align: center;
+	height: 60px;
+	font-size: 15px;
+}
+
+#question #listTable a {
+	text-decoration: none;
+	color: black;
+}
+
+#question #detailTable {
+	margin-bottom: -50px;
+}
+
+#question nav {
+	margin-top: 50px;
+}
+#question nav a {
+	color: black;
+	text-decoration: none;
+	
+}
+
+#question nav li {
+	text-decoration: none;
+	list-style: none;
+	float: left;
+}
+
+
+#question #detailTable th {
+	text-align: right;
+	height: 50px;
+}
+
+#question #detailTable td {
+	text-align: left;
+}
+
+#question #detailButton button {
+	width: 100px;
+	height: 70px;
+	border-width: 0px;
+	border-radius: 30px;
+	
+}
+
+#question #detailButton button:hover {
+	background-color: black;
+	color: rgb(239,239,239);
+}
+
+#question #detailButton {
+	display: flex;
+	justify-content: center;
+}
+
+#question #detailFile {
+	size = 200;
+}
+
+#question .replyLine {
+	float: left;
+}
+
+#question #questionWriter {
+	border-width: 0px;
+	resize: none;
+	overflow: visible;
+}
+
+#question #questionWriter:focus {
+	outline: none;
+}
+
+#search {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+
+#search select, input {
+	margin-right: 5px;
+	padding: 6px;
+}
+
+#menuNav {
+	margin-left: 60%;
+}
+
+.menuButton {
+	background-color: window;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 15px;
+	font-size: large;
+}
+
+.menuButton {
+	margin-left: 30px; /* 원하는 간격 크기를 설정합니다 */
+}
+
+.menuButton:hover {
+	background-color: orange;
+	color: white;
+	font-weight: bold;
+}
+
+#listButton {
+	align: right;
+}
+#listButton button {
+	width: 70px;
+	height: 40px;
+	border-radius: 20px;
+	border: none;
+	cursor: pointer;
+}
+
+#listButton button:hover {
+	background-color: tomato;
+	color: white;
+}

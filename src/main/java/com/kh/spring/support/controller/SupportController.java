@@ -1,0 +1,468 @@
+package com.kh.spring.support.controller;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.kh.spring.common.SpringUtils;
+import com.kh.spring.common.model.vo.PageInfo;
+import com.kh.spring.common.template.Pagination;
+import com.kh.spring.support.model.service.SupportService;
+import com.kh.spring.support.model.vo.Notice;
+import com.kh.spring.support.model.vo.Question;
+
+@Controller
+@RequestMapping("/support")
+public class SupportController {
+	
+	@Autowired
+	private SupportService supportService;
+	
+	@Autowired
+	private ServletContext application;
+	
+	@Autowired
+	private ResourceLoader resourceLoader;
+	
+	@RequestMapping("/FAQ.su")
+    public String FAQ() {
+        return "support/FAQ";
+	}
+	
+	@GetMapping("/support.su")
+	public String support() {
+		return "support/vincero";
+	}
+	
+	@GetMapping("/noticeForm.su")
+	public String noticeForm() {
+		return "support/noticeForm";
+	}
+	
+	@GetMapping("/noticeList.su")
+	public void noticeList(@RequestParam(defaultValue="1") int nowPage, Model model) {
+		int totalRecord = supportService.selectTotalRecordNotice();
+		int limit = 10;
+		int offset = (nowPage - 1) * limit; 
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		PageInfo pi = Pagination.getPageInfo(totalRecord, nowPage, limit, 3);
+		
+		List<Notice> noticeList = supportService.selectNoticeList(rowBounds);
+		model.addAttribute("noticeList", noticeList);
+		model.addAttribute("pi", pi);
+		System.out.println(pi);
+	}
+	
+	@PostMapping("/noticeEnroll.su")
+	public String noticeEnroll(Notice notice, @RequestParam MultipartFile upFile, Model model, RedirectAttributes redirectAtt) {
+		String saveDirectory = application.getRealPath("/resources/upload/notice");
+		System.out.println(saveDirectory);
+		int result = 0;
+		if(upFile.getSize() > 0) {
+			String originalFilename = upFile.getOriginalFilename();
+			String changeFilename = SpringUtils.changeMultipartFile(upFile);
+			
+			File destFile = new File(saveDirectory, changeFilename);
+			
+			try {
+				upFile.transferTo(destFile);	
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			notice.setOriginalFilename(originalFilename);
+			notice.setChangeFilename(changeFilename);
+		}
+		
+		try {
+			result = supportService.insertNotice(notice);
+			redirectAtt.addFlashAttribute("msg", "공지게시판에 등록되었습니다.");
+		} catch (Exception e) {
+			redirectAtt.addFlashAttribute("msg", "공지게시판 등록 실패.");
+		}
+		
+		return "redirect:/support/noticeList.su?noticeNo=1";
+	}
+	
+	@GetMapping("/noticeDetail.su")
+	public String noticeDetail(@RequestParam int noticeNo, Model model) {
+		int result = supportService.updateCountNotice(noticeNo);
+		
+		Notice notice = supportService.selectOneNotice(noticeNo);
+
+		
+		
+		model.addAttribute("notice", notice);
+		return "/support/noticeDetail";
+	}
+	
+	@ResponseBody
+	@GetMapping("/fileDownloadNotice.su")
+	public Resource fileDownloadNotice(@RequestParam int noticeNo, HttpServletResponse response) {
+		Notice notice = supportService.selectOneNotice(noticeNo);
+		
+		String oFilename = notice.getOriginalFilename();
+		String cFilename = notice.getChangeFilename();
+		
+		try {
+			oFilename = new String(oFilename.getBytes("utf-8"), "iso-8859-1");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}	
+		
+		String saveDirectory = application.getRealPath("/resources/upload/notice");
+		File downFile = new File(saveDirectory, cFilename);
+		
+		String location = "file:" + downFile;
+		Resource resource = resourceLoader.getResource(location);
+		
+		response.setContentType("application/octet-stream; charset=utf-8");
+		response.addHeader("Content-Disposition", "attachment; filename=" + oFilename);
+		return resource;
+	}
+	
+	@PostMapping("/noticeUpdate.su")
+	public String noticeUpdate(Notice notice, @RequestParam MultipartFile upFile, Model model, RedirectAttributes redirectAtt) {
+		String saveDirectory = application.getRealPath("/resources/upload/notice");
+		System.out.println(saveDirectory);
+		int result = 0;
+		if(upFile.getSize() > 0) {
+			String originalFilename = upFile.getOriginalFilename();
+			String changeFilename = SpringUtils.changeMultipartFile(upFile);
+			
+			File destFile = new File(saveDirectory, changeFilename);
+			
+			try {
+				upFile.transferTo(destFile);	
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			notice.setOriginalFilename(originalFilename);
+			notice.setChangeFilename(changeFilename);
+		}
+		
+		System.out.println(notice.getNoticeNo());
+		
+		try {
+			if(upFile.isEmpty()) {
+				result = supportService.updateNoticeWithoutFile(notice);
+			} else {
+				result = supportService.updateNotice(notice);
+			}
+			System.out.println(result);
+			redirectAtt.addFlashAttribute("msg", "공지게시글이 수정되었습니다.");
+		} catch (Exception e) {
+			redirectAtt.addFlashAttribute("msg", "공지게시판 수정 실패.");
+		}
+		return "redirect:/support/noticeList.su?noticeNo=1";
+	}
+	
+	@GetMapping("/noticeDelete.su")
+	public String noticeDelete(@RequestParam int noticeNo, Model model, RedirectAttributes redirectAtt) {
+		int result = 0;
+		System.out.println(result);
+		try {
+			result = supportService.deleteNotice(noticeNo);
+			redirectAtt.addFlashAttribute("msg", "공지게시글이 삭제되었습니다.");
+			System.out.println(result);
+		} catch (Exception e) {
+			redirectAtt.addFlashAttribute("msg", "공지게시판 삭제 실패.");
+		}
+		
+		return "redirect:/support/noticeList.su?noticeNo=1";
+	}
+	
+	@GetMapping("/cusCenter.su")
+	public String cusCenter() {
+		return "/support/cusCenter";
+	}
+	
+	@GetMapping("/publicEmergency.su")
+	public String publicEmergency() {
+		return "/support/publicEmergency";
+	}
+	
+	@GetMapping("/questionForm.su")
+	public String questionForm() {
+		return "/support/questionForm";
+	}
+	
+	@GetMapping("/questionAnswerForm.su")
+	public String questionAnswerForm(@RequestParam int questionNo, @RequestParam String questionWriter, Model model) {
+		System.out.println(questionNo);
+		System.out.println(questionWriter);
+		model.addAttribute("questionNoFromParent", questionNo);
+		model.addAttribute("questionWriterFromParent", questionWriter);
+		return "/support/questionAnswerForm";
+	}
+	
+	@GetMapping("/questionList.su")
+	public void questionList(@RequestParam(defaultValue="1") int nowPage, Model model) {
+		int totalRecord = supportService.selectTotalRecordQuestion();
+		int limit = 20;
+		int offset = (nowPage - 1) * limit; 
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		PageInfo pi = Pagination.getPageInfo(totalRecord, nowPage, limit, 3);
+		
+		List<Question> questionList = supportService.selectQuestionList(rowBounds);
+		model.addAttribute("questionList", questionList);
+		model.addAttribute("pi", pi);
+	}
+	
+	@PostMapping("/questionEnroll.su")
+	public String questionEnroll(Question question, @RequestParam MultipartFile upFile, Model model, RedirectAttributes redirectAtt) {
+		String saveDirectory = application.getRealPath("/resources/upload/question");
+		System.out.println(saveDirectory);
+		int result = 0;
+		if(upFile.getSize() > 0) {
+			String originalFilename = upFile.getOriginalFilename();
+			String changeFilename = SpringUtils.changeMultipartFile(upFile);
+			
+			File destFile = new File(saveDirectory, changeFilename);
+			
+			try {
+				upFile.transferTo(destFile);	
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			question.setOriginalFilename(originalFilename);
+			question.setChangeFilename(changeFilename);
+		}
+		try {
+			result = supportService.insertQuestion(question);
+			redirectAtt.addFlashAttribute("msg", "질문게시판에 등록되었습니다.");
+		} catch (Exception e) {
+			redirectAtt.addFlashAttribute("msg", "질문게시판 등록 실패.");
+		}
+		
+		return "redirect:/support/questionList.su?questionNo=1";
+	}
+	
+	@PostMapping("/questionAnswerEnroll.su")
+	public String questionAnswerEnroll(Question question, Model model, RedirectAttributes redirectAtt) {
+		int result = 0;
+		int result2 = 0;
+		question.setQuestionStatus("1");
+		question.setDepth(1);
+		question.setOriginalFilename("null");
+		question.setChangeFilename("null");
+		int refFromReply = question.getRef();
+		
+		System.out.println(question.toString());
+		
+		try {
+			result = supportService.insertQuestionAnswer(question);
+			redirectAtt.addFlashAttribute("msg", "답변이 등록되었습니다.");
+			System.out.println(result);
+			result2 = supportService.updateQuestionStatus(refFromReply);
+			System.out.println(result2);
+		} catch (Exception e) {
+			redirectAtt.addFlashAttribute("msg", "답변 등록 실패.");
+			System.out.println(result);
+		}
+		
+		return "redirect:/support/questionList.su?questionNo=1";
+	}
+	
+	@GetMapping("/questionDetail.su")
+	public String questionDetail(@RequestParam int questionNo, Model model) {
+		int result = supportService.updateCountQuestion(questionNo);
+		Question question = supportService.selectOneQuestion(questionNo);
+		
+		model.addAttribute("question", question);
+		System.out.println(question.getQuestionNo());
+		return "/support/questionDetail";
+	}
+	
+	@ResponseBody
+	@GetMapping("/fileDownloadQuestion.su")
+	public Resource fileDownloadQuestion(@RequestParam int questionNo, HttpServletResponse response) {
+		Question question = supportService.selectOneQuestion(questionNo);
+		
+		String oFilename = question.getOriginalFilename();
+		String cFilename = question.getChangeFilename();
+		
+		try {
+			oFilename = new String(oFilename.getBytes("utf-8"), "iso-8859-1");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}	
+		
+		String saveDirectory = application.getRealPath("/resources/upload/question");
+		File downFile = new File(saveDirectory, cFilename);
+		
+		String location = "file:" + downFile;
+		Resource resource = resourceLoader.getResource(location);
+		
+		response.setContentType("application/octet-stream; charset=utf-8");
+		response.addHeader("Content-Disposition", "attachment; filename=" + oFilename);
+		return resource;
+	}
+	
+	@PostMapping("/questionUpdate.su")
+	public String questionUpdate(Question question, @RequestParam MultipartFile upFile, Model model, RedirectAttributes redirectAtt) {
+		String saveDirectory = application.getRealPath("/resources/upload/question");
+		System.out.println(saveDirectory);
+		int result = 0;
+		if(upFile.getSize() > 0) {
+			String originalFilename = upFile.getOriginalFilename();
+			String changeFilename = SpringUtils.changeMultipartFile(upFile);
+			
+			File destFile = new File(saveDirectory, changeFilename);
+			
+			try {
+				upFile.transferTo(destFile);	
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			question.setOriginalFilename(originalFilename);
+			question.setChangeFilename(changeFilename);
+		}
+		
+		System.out.println(question.getQuestionNo());
+		
+		try {
+			if(upFile.isEmpty()) {
+				result = supportService.updateQuestionWithoutFile(question);
+			} else {
+				result = supportService.updateQuestion(question);
+			}
+			redirectAtt.addFlashAttribute("msg", "질문게시글이 수정되었습니다.");
+		} catch (Exception e) {
+			redirectAtt.addFlashAttribute("msg", "질문게시글 수정 실패.");
+		}
+		return "redirect:/support/questionList.su?questionNo=1";
+	}
+	
+	@GetMapping("/questionDelete.su")
+	public String questionDelete(@RequestParam int questionNo, Model model, @RequestParam int ref, RedirectAttributes redirectAtt) {
+		int result = 0;
+		int result2 = 0;
+		System.out.println(result);
+		try {
+			if(questionNo == ref) {
+				result = supportService.deleteQuestionWithReply(ref);
+			} else {
+				result = supportService.deleteQuestion(questionNo);
+				result2 = supportService.backQuestionStatus(ref);
+			}
+			redirectAtt.addFlashAttribute("msg", "질문게시글이 삭제되었습니다.");
+			System.out.println(result);
+		} catch (Exception e) {
+			redirectAtt.addFlashAttribute("msg", "질문게시글 삭제 실패.");
+		}
+		
+		return "redirect:/support/questionList.su?questionNo=1";
+	}
+	
+	@GetMapping("/searchQuestion.su")
+	public String searchQuestion(@RequestParam String searchType, @RequestParam String searchInput, Model model, RedirectAttributes redirectAtt) {
+		System.out.println(searchType);
+		System.out.println(searchInput);
+		List<Question> searchQuest = null;
+		try {
+			if(searchType.equals("questionWriter")) {
+				searchQuest = supportService.selectSearchQuestionId(searchInput);
+			}
+			if(searchType.equals("questionTitle")) {
+				searchQuest = supportService.selectSearchQuestionTitle(searchInput);
+			}
+			if(searchType.equals("content")) {
+				searchQuest = supportService.selectSearchQuestionContent(searchInput);
+			}
+			if(searchType.equals("questionStatus")) {
+				if(searchInput.equals("완료")) {
+					searchQuest = supportService.selectSearchQuestionStatus("1");
+				}
+				if(searchInput.equals("대기중")) {
+					searchQuest = supportService.selectSearchQuestionStatus("0");
+				}
+			}
+			redirectAtt.addFlashAttribute("searchQuest", searchQuest);
+		} catch(Exception e) {
+			redirectAtt.addFlashAttribute("msg", "검색에 실패했습니다");
+		}
+		
+		return "/support/questionList";
+	}
+
+		public static final String SERVICE_KEY = "BLSU8cfc7cUf5JHf21bnI4ONXtjvud7j03E79f2iMyz0MOYvAo1XsYCarIwuSkAZJkErTfpSa2cMp6hIZIqO1A%3D%3D";
+
+		@ResponseBody
+		@GetMapping(value="emergency.su", produces="text/xml; charset=utf-8")
+		public String Emergency(String location) throws IOException {
+			String url = "http://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytListInfoInqire";
+			url += "?ServiceKey=" + SERVICE_KEY;
+			url += "&Q0=" + URLEncoder.encode(location, "UTF-8");
+			url += "&numOfRows=100";
+			URL requestUrl = new URL(url);
+			HttpURLConnection urlConnection = (HttpURLConnection)requestUrl.openConnection();
+			urlConnection.setRequestMethod("GET");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+			
+			String responseText = "";
+			String line;
+			while((line = br.readLine()) != null) {
+				responseText += line;
+			}
+			
+			System.out.println(responseText);
+			
+			br.close();
+			urlConnection.disconnect();
+			
+			return responseText;
+		}
+		
+		@GetMapping("/privacyPolicy.su")
+		   public void privacyPolicy() {
+		   }
+
+		   @GetMapping("/privacyStatement.su")
+		   public void privacyStatement() {
+		   }
+
+		   @GetMapping("/legalNotice.su")
+		   public void legalNotice() {
+		   }
+		   
+		 /*  @GetMapping("/rule.su")
+		   public void rule() {
+		   } */
+
+		   @RequestMapping("/rule.su")
+		    public void rule() {
+		    }
+		
+
+}

@@ -1,0 +1,339 @@
+.wrap {
+	position: absolute;
+	left: 0;
+	bottom: 40px;
+	width: 288px;
+	height: 132px;
+	margin-left: -144px;
+	text-align: left;
+	overflow: hidden;
+	font-size: 12px;
+	font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+	line-height: 1.5;
+}
+
+.wrap * {
+	padding: 0;
+	margin: 0;
+}
+
+.wrap .info {
+	width: 286px;
+	height: 120px;
+	border-radius: 5px;
+	border-bottom: 2px solid #ccc;
+	border-right: 1px solid #ccc;
+	overflow: hidden;
+	background: #fff;
+}
+
+.wrap .info:nth-child(1) {
+	border: 0;
+	box-shadow: 0px 1px 2px #888;
+}
+
+.info .title {
+	padding: 5px 0 0 10px;
+	height: 30px;
+	background: #eee;
+	border-bottom: 1px solid #ddd;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.info .close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	color: #888;
+	width: 17px;
+	height: 17px;
+	background:
+		url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
+}
+
+.info .close:hover {
+	cursor: pointer;
+}
+
+.info .body {
+	position: relative;
+	overflow: hidden;
+}
+
+.info .desc {
+	position: relative;
+	margin: 13px 0 0 90px;
+	height: 75px;
+}
+
+.desc .ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.desc .jibun {
+	font-size: 11px;
+	color: #888;
+	margin-top: -2px;
+}
+
+.info .img {
+	position: absolute;
+	top: 6px;
+	left: 5px;
+	width: 73px;
+	height: 71px;
+	border: 1px solid #ddd;
+	color: #888;
+	overflow: hidden;
+}
+
+.info:after {
+	content: '';
+	position: absolute;
+	margin-left: -12px;
+	left: 50%;
+	bottom: 0;
+	width: 22px;
+	height: 12px;
+	background:
+		url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+}
+
+.info .link {
+	color: #5085BB;
+}
+
+#dateFilter:hover {
+	background-color: #c8220f;
+}
+
+#menuNav {
+	margin-left: 78%;
+	padding-bottom: 20px;
+}
+
+.menuButton {
+	background-color: window;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 15px;
+	font-size: large;
+}
+
+.menuButton {
+	margin-left: 30px; /* 원하는 간격 크기를 설정합니다 */
+}
+
+.menuButton:hover {
+	background-color: orange;
+	color: white;
+	font-weight: bold;
+}
+
+.pre {
+	background-color: #BDBDBD;
+	width: 14%;
+	height: 30px;
+	text-align: center;
+	padding-top: 15px;
+}
+
+.dateform {
+	padding-top: 15px;
+	height: 30px;
+}
+
+.dateform {
+	
+}
+
+#matchBody {
+	width: 85%;
+	height: 524px;
+	justify-content: center;
+	margin: 0 auto;
+	text-align: center;
+	border-radius: 10px;
+	padding-top: 5px;
+	margin-bottom: 10%;
+}
+
+#mapdateT {
+	border-collapse: collapse;
+	margin: 0 auto;
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+#mapdateT th, #mapdateT td {
+	border: 2px solid black;
+}
+
+#map {
+	width: 65%;
+	height: 450px;
+	float: left;
+	border-top: solid 2px #f7f7f7;
+}
+
+#schedule {
+	width: 35%;
+	height: 390px;
+	float: left;
+	z-index: 1;
+}
+
+#schedule tr, td {
+	white-space: nowrap;
+}
+
+#scheduleT {
+	text-align: center;
+	border-spacing: 15px;
+	width: 100%;
+}
+
+.scheduleButton {
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 10px;
+}
+
+.scheduleButton:hover {
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 10px;
+	background-color: #c8220f;
+	color: white;
+}
+
+
+#delete {
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 5px;
+}
+#delete:hover {
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 5px;
+	background-color: #c8220f;
+	color: white;
+}
+
+
+.wrap {
+	position: absolute;
+	left: 0;
+	bottom: 40px;
+	width: 288px;
+	height: 132px;
+	margin-left: -144px;
+	text-align: left;
+	overflow: hidden;
+	font-size: 12px;
+	font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+	line-height: 1.5;
+}
+
+.wrap * {
+	padding: 0;
+	margin: 0;
+}
+
+.wrap .info {
+	width: 286px;
+	height: 120px;
+	border-radius: 5px;
+	border-bottom: 2px solid #ccc;
+	border-right: 1px solid #ccc;
+	overflow: hidden;
+	background: #fff;
+}
+
+.wrap .info:nth-child(1) {
+	border: 0;
+	box-shadow: 0px 1px 2px #888;
+}
+
+.info .title {
+	padding: 5px 0 0 10px;
+	height: 30px;
+	background: #eee;
+	border-bottom: 1px solid #ddd;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.info .close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	color: #888;
+	width: 17px;
+	height: 17px;
+	background:
+		url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
+}
+
+.info .close:hover {
+	cursor: pointer;
+}
+
+.info .body {
+	position: relative;
+	overflow: hidden;
+}
+
+.info .desc {
+	position: relative;
+	margin: 13px 0 0 90px;
+	height: 75px;
+}
+
+.desc .ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.desc .jibun {
+	font-size: 11px;
+	color: #888;
+	margin-top: -2px;
+}
+
+.info .img {
+	position: absolute;
+	top: 6px;
+	left: 5px;
+	width: 73px;
+	height: 71px;
+	border: 1px solid #ddd;
+	color: #888;
+	overflow: hidden;
+}
+
+.info:after {
+	content: '';
+	position: absolute;
+	margin-left: -12px;
+	left: 50%;
+	bottom: 0;
+	width: 22px;
+	height: 12px;
+	background:
+		url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+}
+
+.info .link {
+	color: #5085BB;
+}

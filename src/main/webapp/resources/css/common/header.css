@@ -1,0 +1,344 @@
+/* 전체 반영 css*/
+@font-face {
+	font-family: 'KIMM_Bold';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/KIMM_Bold.woff2')
+		format('woff2');
+	font-weight: 700;
+	font-style: normal;
+}
+
+* {
+	padding: 0;
+	font-family: 'KIMM_Bold';
+}
+
+ul li {
+	list-style: none;
+}
+
+li {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+/* 헤더 */
+#header {
+	width: 90%;
+	margin: 0 auto;
+	text-align: center;
+	justify-content: center;
+	padding-bottom: 10%;
+}
+
+#logo {
+	float: left;
+}
+
+#menubar {
+	float: right;
+	width: 30%;
+	padding: 10px;
+	width: 600px;
+}
+
+#menubar nav>ul>li {
+	padding: 0 20px;
+}
+
+#member {
+	position: relative;
+	cursor: pointer;
+}
+
+#member>ul {
+	width: 150px;
+	display: none;
+	position: absolute;
+	padding: 10px;
+	right: 0;
+	z-index: 2;
+}
+
+#member>ul>li {
+	padding: 7px;
+}
+
+#member>ul>li>a {
+	color: white;
+	text-align: center;
+}
+
+#member:hover ul {
+	display: block;
+	border-radius: 5px;
+	background-color: #333333e5;
+	padding-top: 20px;
+}
+
+#member>ul>li>a:hover {
+	color: #F2A922;
+	font-weight: bold;
+}
+
+#loginName {
+	color: white;
+	padding: 10px;
+}
+
+#menubar {
+	transition: 0.3s ease-in;
+	position: relative;
+}
+
+#menu_list {
+	display: table;
+	width: 100%;
+	text-align: center;
+}
+
+.titlemenu {
+	display: table-cell;
+	vertical-align: middle;
+	height: 50px;
+	width: 20%;
+	position: relative;
+}
+
+.titlemenu2 {
+	display: table-cell;
+	vertical-align: middle;
+	height: 50px;
+	width: 25%;
+	position: relative;
+}
+
+.titlemenu3 {
+	display: table-cell;
+	vertical-align: middle;
+	height: 50px;
+	width: 5%;
+	position: relative;
+}
+
+.titlemenu ul {
+	width: 100%;
+	display: none;
+	position: absolute;
+	transition: 0.3s 0.2s;
+	right: 1%;
+}
+
+.titlemenu2 ul {
+	width: 100%;
+	display: none;
+	position: absolute;
+	transition: 0.3s 0.2s;
+	right: 1%;
+}
+
+.titlemenu ul li {
+	white-space: nowrap;
+	padding: 15px;
+}
+
+.titlemenu2 ul li {
+	white-space: nowrap;
+	padding: 15px;
+}
+
+#menu_list>li>a {
+	color: black;
+}
+
+#menu_list>li:hover .title {
+	color: #c8220f;
+}
+
+.titlemenu:hover ul {
+	display: block;
+	background-color: #f7f7f7;
+	z-index: 2;
+}
+
+.titlemenu2:hover ul {
+	display: block;
+	background-color: #f7f7f7;
+	z-index: 2;
+}
+
+.submenu_list>li:hover {
+	background-color: #c8220f;
+}
+
+.submenu_list>li>a {
+	color: black;
+}
+
+.submenu_list>li:hover a {
+	color: white;
+}
+
+.sidebar {
+	position: fixed; /* 스크롤을 따라오도록 지정 */
+	background-color: black;
+	width: 120px;
+	z-index: 2;
+	border-radius: 15px;
+	top: 50%;
+	left: 1%;
+}
+
+.sidebar nav>ul>li>ul {
+	display: none;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+/* 모든 메뉴의 a에 속성값 부여 */
+.sidebar nav>ul>li>a {
+	display: block;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+}
+
+/* 자식의 position이 absolute일 때 자식을 영역 안에 가두어 준다 */
+.sidebar nav>ul>li {
+	position: relative;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+/* 모든 메뉴가 마우스 인식 시 반응 */
+.sidebar nav>ul>li:hover {
+	background-color: #c8220f;
+	/* border-bottom: 2px solid #c8220f; */
+}
+
+/* 1차 메뉴의 항목이 마우스 인식 시에 2차 메뉴 등장 */
+.sidebar nav>ul>li:hover #subside_list {
+	display: block;
+	position: absolute;
+	background-color: #888;
+	top: 0; /* 2차 메뉴의 상단을 1차 메뉴의 상단에 고정 */
+	left: 100%; /* 2차 메뉴를 1차 메뉴의 너비만큼 이동 */
+	width: 100%; /* 1차 메뉴의 너비를 상속 */
+	z-index: 2;
+	text-align: center;
+}
+/* 1차 메뉴의 항목이 마우스 인식 시에 2차 메뉴 등장 */
+.sidebar nav>ul>li:hover #subside_list2 {
+	display: block;
+	position: absolute;
+	background-color: #888;
+	bottom: 10%;
+	left: 100%; /* 2차 메뉴를 1차 메뉴의 너비만큼 이동 */
+	width: 100%; /* 1차 메뉴의 너비를 상속 */
+	z-index: 2;
+	text-align: center;
+}
+
+.sidebar nav>ul>li>ul>li:hover {
+	background-color: #c8220f;
+}
+
+.sidebar nav>ul>li>ul>li>ul>li:hover {
+	background-color: #c8220f;
+}
+
+.sidebar nav>ul>li>ul>li a {
+	color: white;
+	font-weight: bold;
+}
+
+.sidebar nav>ul>li>ul>li {
+	position: relative;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+/* 3차 사이드바 메뉴 */
+.sidebar nav>ul>li>ul>li .third {
+	display: none;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.sidebar nav>ul>li>ul>li>ul>li {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.sidebar nav>ul>li>ul>li:hover ul {
+	display: block;
+	position: absolute;
+	background-color: #888;
+	top: 0; /* 2차 메뉴의 상단을 1차 메뉴의 상단에 고정 */
+	left: 100%; /* 2차 메뉴를 1차 메뉴의 너비만큼 이동 */
+	width: 100%; /* 1차 메뉴의 너비를 상속 */
+	z-index: 2;
+	text-align: center;
+}
+
+.sidebar #loginName {
+	color: white;
+	border-bottom: 2px solid white;
+	padding: 15px;
+	text-align: center;
+}
+
+input[type=password] {
+	font-family: '맑은 고딕', 'malgun gothic', '돋움', Dotum, sans-serif;
+}
+
+input[type=password]::placeholder {
+	font-family: '기존 적용 폰트';
+}
+
+.modal-bg {
+	display: none;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
+	background: rgba(0, 0, 0, 0);
+	z-index: 999;
+}
+
+.modal-wrap {
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 700px;
+	height: 300px;
+	overflow-y: auto;
+	background-color: #fff;
+	z-index: 1000;
+	border: 2px solid;
+}
+
+.modal-wrap-title {
+	display: none;
+	position: absolute;
+	top: 32%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 700px;
+	height: 30px;
+	background-color: #fff;
+	z-index: 1000;
+	border: 2px solid;
+}
+
+.modal-close {
+	border: none;
+	background-color: rgba(0, 0, 0, 0);
+}

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kh.spring.gym.model.dao.GymDao">
+
+	<resultMap type="gym" id="gymMap"></resultMap>
+	<resultMap type="schedule" id="scheduleMap"></resultMap>
+	<resultMap type="match" id="matchMap"></resultMap>
+	<resultMap type="AlarmArg" id="alarmArgMap"></resultMap>
+	<resultMap type="MatchList" id="matchListMap"></resultMap>
+	
+	<insert id="insertJoin">
+		insert into gym
+		values (
+			seq_gym_no.nextval,
+			#{gymName},
+			#{gymType},
+			#{gymBoss},
+			#{gymCoach},
+			#{coachPhone},
+			#{gymPhone},
+			#{gymZipcode},
+			#{gymAddress},
+			#{gymDetailaddress},
+			#{matchCount},
+			#{gymBank},
+			#{gymAccount},
+			#{businessNo},
+			#{gymRegdate},
+			#{gymStatus},
+			#{reason},
+			#{userId}
+		  )
+	</insert>
+	
+	<insert id="insertSchedule">
+		insert into schedule
+		values (
+			seq_schedule.nextval,
+			#{code},
+			#{matchDate},
+			#{matchTime},
+			#{userId},
+			#{gymNo}
+		)
+	</insert>
+	
+	<select id="selectCodeList" resultMap="scheduleMap">
+		select *
+		  from schedule
+		 where user_id = #{userId}
+	</select>
+	
+	<delete id="deleteSchedule">
+		delete from schedule
+		where code = #{code}
+	</delete>
+	
+	<select id="selectGymNo" resultMap="gymMap">
+		select gym_no
+		  from gym
+		 where user_id = #{userId}
+	</select>
+	
+	<!-- 로그인한 정보로 체육관 정보 가져오기 -->
+	<select id="getGymByUserId" resultMap="gymMap">
+		select *
+		  from gym g
+		  inner join member m on g.user_id = m.user_id
+		 where g.user_id = #{userId} 
+	</select>
+	
+<!-- 	<select id="loginGym" resultMap="gymMap">
+		select *
+		  from gym g, member m
+		 where g.user_id = m.user_id
+	</select> -->
+	
+	<!-- 내 체육관 정보보기 -->
+	<select id="myGym" resultMap="gymMap">
+		select *
+		  from gym 
+		 where user_id = #{userId}
+	</select>
+	
+	<!-- 내 체육관 정보 가져오기(수정) -->
+	<select id="selectMyGym" resultMap="gymMap">
+		select *
+		  from gym
+		 where user_id = #{userId}
+	</select>
+	
+	<!-- 내 체육관 정보 보내기(수정) -->
+	<update id="myGymUpdate">
+		update gym
+		   set gym_boss = #{gymBoss},
+		   	   gym_coach = #{gymCoach},
+		   	   coach_phone = #{coachPhone},
+		   	   gym_phone = #{gymPhone},
+		   	   gym_zipcode = #{gymZipcode},
+		   	   gym_address = #{gymAddress},
+		   	   gym_detailaddress = #{gymDetailaddress},
+		   	   gym_bank = #{gymBank},
+		   	   gym_account = #{gymAccount}
+		where user_id = #{userId}
+	</update>
+	
+	<select id="selectScheduleMatchList" resultMap="matchMap">
+		SELECT *
+		FROM MATCH M
+		JOIN SCHEDULE S ON M.NUM = S.NUM
+		WHERE M.MATCH_NO = #{code}
+	</select>
+	
+	<select id="selectScheduleDel" resultMap="alarmArgMap">
+		SELECT M.USER_ID1 AS RECEIVER_ID, M.USER_ID2 AS SENDER_ID, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NO
+		FROM MATCH M
+		JOIN GYM G ON M.GYM_NO = G.GYM_NO
+		WHERE M.MATCH_NO = #{matchNo}
+	</select>
+	
+	<select id="selectMyGymMatchList" resultMap="matchListMap">
+		SELECT M.NO, M.GYM_NO, M.MATCHDATE, M.MATCHTIME, M.USER_ID1, M.USER_ID2, P1.PRO_NICK, P2.PRO_NICK AS PRO_NICK2
+		FROM MATCH M
+		JOIN PROFILE P1 ON M.USER_ID1 = P1.USER_ID
+		JOIN PROFILE P2 ON M.USER_ID2 = P2.USER_ID
+		WHERE M.GYM_NO = #{gymNo}
+		AND M.MATCH_STATUS = 4
+		ORDER BY M.MATCHDATE, M.MATCHTIME
+	</select>
+	
+	<select id="selectTotalRecord" resultType="_int">
+		SELECT COUNT(*)
+		FROM MATCH
+		WHERE MATCH_STATUS = 4
+		AND GYM_NO = #{gymNo}
+	</select>
+</mapper>

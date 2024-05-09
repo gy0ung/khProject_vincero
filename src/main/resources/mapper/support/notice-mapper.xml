@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kh.spring.support.model.dao.SupportDao">
+<resultMap type="notice" id="noticeMap"></resultMap>
+	
+	<select id="selectNoticeList" resultMap="noticeMap">
+		select *
+		  from notice
+		 order by notice_no desc 
+	</select>
+	
+	<select id="selectTotalRecordNotice" resultType="_int">
+		select count(*)
+		  from notice
+	</select>
+	
+	<insert id="insertNotice">
+		insert into notice
+		values(
+			seq_notice_no.nextval,
+			#{noticeTitle},
+			#{noticeWriter},
+			#{content},
+			#{originalFilename},
+			#{changeFilename},
+			default,
+			default
+		)
+	</insert>
+	
+	<update id="updateCountNotice">
+		update notice
+		   set count = count + 1
+		 where notice_no = #{noticeNo}  
+	</update>
+	
+	<select id="selectOneNotice" resultMap="noticeMap">
+		select *
+		  from notice
+		 where notice_no = #{noticeNo} 
+	</select>
+	
+	<update id="updateNotice">
+		update notice
+		   set notice_title = #{noticeTitle},
+		   	   content = #{content},
+		   	   original_filename = #{originalFilename},
+		   	   change_filename = #{changeFilename}
+		 where notice_no = #{noticeNo}
+	</update>
+	
+	<update id="updateNoticeWithoutFile">
+		update notice
+		   set notice_title = #{noticeTitle},
+		   	   content = #{content}
+		 where notice_no = #{noticeNo}
+	</update>
+	
+	<delete id="deleteNotice">
+		delete from notice
+		 where notice_no = #{noticeNo}
+	</delete>
+	
+</mapper>

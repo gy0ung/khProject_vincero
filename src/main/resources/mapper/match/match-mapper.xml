@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.kh.spring.match.model.dao.MatchDao">
+	<resultMap type="gym" id="matchMap"></resultMap>
+	<resultMap type="MatchInfo" id="scheduleInfoMap"></resultMap>
+	<resultMap type="MatchInfo" id="scheduleIfvMap">
+		<result property="code" column="match_no" />
+	</resultMap>
+	<resultMap type="Match" id="MatchMap"></resultMap>
+	<resultMap type="MatchList" id="MatchListMap"></resultMap>
+	<resultMap type="ChallengerList" id="ChallengerListMap"></resultMap>
+	
+	<select id="selectScheduleList" resultMap="scheduleInfoMap">
+		SELECT S.GYM_NO, G.GYM_NAME, G.GYM_ADDRESS, G.GYM_DETAILADDRESS, S.MATCH_DATE, S.MATCH_TIME, S.CODE, S.NUM
+		FROM SCHEDULE S
+		JOIN GYM G ON S.GYM_NO = G.GYM_NO
+		WHERE S.MATCH_DATE BETWEEN TO_DATE(#{matchdate} || ' 00:00:00', 'YYYY/MM/DD HH24:MI:SS') AND TO_DATE(#{matchdate} || ' 23:59:59', 'YYYY/MM/DD HH24:MI:SS')
+		ORDER BY S.GYM_NO, S.MATCH_TIME
+	</select>
+	
+	<insert id="registerMatch">
+		INSERT INTO MATCH
+		(NO, MATCH_NO, GYM_NO, USER_ID1, MATCHDATE, MATCHTIME, MATCH_STATUS, DEL_YN, NUM)
+		VALUES(
+			SEQ_NO.NEXTVAL,
+			#{matchNo},
+			#{gymNo},
+			#{userId1},
+			#{matchdate},
+			#{matchtime},
+			#{matchStatus},
+			#{delYn},
+			#{num}
+		)		
+	</insert>
+	
+	<select id="selectMatch" resultMap="MatchMap">
+		SELECT MATCH_NO, GYM_NO, USER_ID1, DEL_YN
+		FROM MATCH
+		WHERE MATCH_NO = #{matchNo}
+		AND GYM_NO     = #{gymNo}
+		AND USER_ID1   = #{userId1}
+	</select>
+	
+	<update id="updateMatch">
+		UPDATE MATCH
+		<set>
+			<if test="userId1     != null">USER_ID1       = #{userId1},    </if>
+			<if test="userId2     != null">USER_ID2       = #{userId2},    </if>
+			<if test="matchdate   != null">MATCHDATE      = #{matchdate},  </if>
+			<if test="matchtime   != null">MATCHTIME      = #{matchtime},  </if>
+			<if test="score1      != null">SCORE1         = #{score1},     </if>
+			<if test="score2      != null">SCORE2         = #{score2},     </if>
+			<if test="matchStatus != null">MATCH_STATUS   = #{matchStatus},</if>
+			<if test="delYn       != null">DEL_YN         = #{delYn}       </if>
+		</set>
+		WHERE 1=1
+		<if test="matchNo		!= null">AND MATCH_NO   = #{matchNo}</if>
+		<if test="userId1		!= null">AND USER_ID1   = #{userId1}</if>
+		<if test="userId2       != null">AND USER_ID2   = #{userId2}</if>
+		<if test="no			!= null">AND NO         = #{no}     </if>
+	</update>
+	
+	<select id="selectMatchList" resultMap="scheduleIfvMap" parameterType="map">
+		SELECT M.NO, M.MATCH_NO, G.GYM_NO, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NUM
+		FROM MATCH M
+		JOIN GYM G ON M.GYM_NO = G.GYM_NO
+		WHERE M.USER_ID1 = #{userId}
+		AND M.MATCHDATE BETWEEN TO_DATE(#{matchdate} || ' 00:00:00', 'YYYY/MM/DD HH24:MI:SS') AND TO_DATE(#{matchdate} || ' 23:59:59', 'YYYY/MM/DD HH24:MI:SS')
+		AND M.DEL_YN     = 'N'
+		AND (MATCH_STATUS = 1 OR MATCH_STATUS = 3)
+		ORDER BY M.MATCHTIME
+	</select>
+	
+	<select id="selectTotalRecordMatchList" resultType="_int">
+		select count(*)
+		  from match
+		 where match_status = 1
+	</select>
+	
+	<select id="selectMatchingList" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 1
+		   order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="matchListFilterGender" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p, member r
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.user_id1 = r.user_id
+		   and r.user_gender = #{gender}
+		   and m.match_status = 1
+		 order by m.matchdate , m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMatchListGender" resultType="_int">
+      	  select count(*)
+                    from match m, gym g, profile p, member r
+		            where m.gym_no = g.gym_no
+		            and m.user_id1 = p.user_id
+		            and m.user_id1 = r.user_id
+		            and r.user_gender = #{gender}
+		            and m.match_status = 1
+	</select>
+	
+	<select id="selectTotalRecordMatchListLocation" resultType="_int">
+      	  select count(*)
+                    from match m, gym g, profile p
+		            where m.gym_no = g.gym_no
+		            and m.user_id1 = p.user_id
+		            and g.gym_address Like '' || #{locations} || '%'
+		            and m.match_status = 1
+	</select>
+	
+	<select id="matchListFilterLocation" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and g.gym_address Like '' || #{locations} || '%'
+		   and m.match_status = 1
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMatchListNick" resultType="_int">
+      	  select count(*)
+                    from match m, gym g, profile p
+		            where m.gym_no = g.gym_no
+		            and m.user_id1 = p.user_id
+		            and p.pro_nick Like '%' || #{searchInput} || '%'
+		             and m.match_status = 1
+	</select>
+	
+	<select id="matchListFilterNick" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and p.pro_nick Like '%' || #{searchInput} || '%'
+		   and m.match_status = 1
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="matchListFilterDow" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and to_char(m.matchdate, 'D') = #{dowInt}
+		   and m.match_status = 1
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMatchListDow" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and to_char(m.matchdate, 'D') = #{dowInt}
+		   and m.match_status = 1
+	</select>
+	
+	<delete id="deleteMatch">
+		DELETE FROM MATCH
+		WHERE MATCH_NO = #{code}
+	</delete>
+	
+	<select id="toCopyMatchData" resultMap="MatchMap">
+		select *
+		  from match
+		 where no = #{no}
+	</select>
+	
+	<select id="challengerInsertDecision" resultType="_int">
+		select count(*)
+		  from match
+		 where no = #{no}
+		   and user_id2 is null
+	</select>
+	
+	<select id="challengerInsertDecision2" resultType="_int">
+		select count(*)
+		  from match
+		 where no = #{no}
+		   and user_id2 is not null
+	</select>
+	
+	<select id="challengerInsertDecision3" resultType="_int">
+		select count(*)
+		  from match
+		 where match_no = #{matchNo}
+		   and user_id1 = #{userId1}
+	</select>
+	
+	<select id="challengerInsertDecision4" resultType="_int">
+		select count(*)
+		  from match
+		 where match_no = #{matchNo}
+		   and user_id1 = #{userId1}
+		   and user_id2 = #{userId2}
+	</select>
+	
+	<update id="challengerUpdate">
+		update match
+		   set user_id2 = #{userId2}
+		 where no = #{no}
+	</update>
+	
+	<insert id="challengerInsert">
+		insert into match
+			values(
+				seq_no.nextval,
+				#{matchNo},
+				#{gymNo},
+				#{userId1},
+				#{userId2},
+				#{matchdate},
+				#{matchtime},
+				#{score1},
+				#{score2},
+				#{matchStatus},
+				#{delYn},
+				#{num},
+				default,
+				default,
+				default,
+				default
+			)
+	</insert>
+	
+	<select id="selectTotalRecordMatchListReg" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 1
+		   and m.user_id1 = #{userId1}
+	</select>
+	
+	<select id="matchListReg" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 1
+		   and m.user_id1 = #{userId1}
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMatchListChal" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 1
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId2})
+	</select>
+	
+	<select id="matchListChal" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 1
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId2})
+		  order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMatchListWaitingRegPay" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 3
+		   and m.user_id1 = #{userId3}
+		   
+	</select>
+	
+	<select id="selectTotalRecordMatchListWaitingChalPay" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 3
+		   and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId4})
+	</select>
+	
+	<select id="myMatchWaitingRegPay" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 3
+		   and m.user_id1 = #{userId3}
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="myMatchWaitingChalPay" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 3
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId4})
+		  order by m.matchdate, m.matchtime
+	</select>
+	
+	
+	<select id="selectTotalRecordMatchListAfterRegPay" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 4
+		   and m.user_id1 = #{userId5}
+	</select>
+	
+	<select id="myMatchAfterChalPay" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 4
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId6})
+		  order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMatchListAfterRegEnd" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 5
+		   and m.user_id1 = #{userId7}
+	</select>
+	
+	<select id="selectTotalRecordMatchListAfterChalEnd" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 5
+		   and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId8})
+	</select>
+	
+	<select id="myMatchAfterRegEnd" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 5
+		   and m.user_id1 = #{userId7}
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="myMatchAfterChalEnd" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 5
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId8})
+		  order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="toChallengerList" resultMap="ChallengerListMap">
+		select user_id2
+		  from match
+		 where match_no = #{matchNo}
+		   and user_id1 = #{userId1}
+	</select>
+	
+	<delete id="regCancel">
+		delete
+		  from match
+		 where match_no = #{matchNo}
+		   and user_id1 = #{userId1}
+	</delete>
+	
+	<select id="challengerStatusDecision" resultType="_int">
+		select count(*)
+		  from match
+		 where match_no = #{matchNo}
+		   and user_id1 = #{userId1}
+		   and user_id2 = #{userId2}
+		   and match_status = 1
+	</select>
+	
+	<delete id="chalCancel">
+		delete
+		  from match
+		 where match_no = #{matchNo}
+		   and user_id1 = #{userId1}
+		   and user_id2 = #{userId2}
+		   and match_status = 0
+	</delete>
+	
+	<update id="chalCancelUpdate">
+		update match
+		   set user_id2 = null
+		 where match_no = #{matchNo}
+		   and user_id1 = #{userId1}
+		   and user_id2 = #{userId2}
+		   and match_status = 1
+	</update>
+	
+	<select id="selectListChal" resultMap="MatchMap">
+		select *
+		  from match
+		 where user_id2 = #{userId2}
+	</select>
+	
+	<select id="selectOneMatch" resultMap="MatchListMap">
+		SELECT M.USER_ID1, M.USER_ID2, G.GYM_NAME, M.MATCHDATE, M.MATCHTIME, M.NO, P1.PRO_NICK, P2.PRO_NICK AS PRO_NICK2, M.MATCH_STATUS, M.MATCH_NO
+		FROM MATCH M
+		JOIN GYM G ON M.GYM_NO = G.GYM_NO
+		JOIN PROFILE P1 ON M.USER_ID1 = P1.USER_ID
+		JOIN PROFILE P2 ON M.USER_ID2 = P2.USER_ID
+		WHERE M.NO = #{no}
+	</select>
+	
+	<select id="selectTotalRecordMainListGender" resultType="_int">
+      	  select count(*)
+            from match m, gym g, profile p, member r
+           where m.gym_no = g.gym_no
+             and m.user_id1 = p.user_id
+             and m.user_id1 = r.user_id
+             and r.user_gender = #{gender}
+             and m.match_status = 4
+	</select>
+	
+	<select id="mainListFilterGender" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p, member r
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.user_id1 = r.user_id
+		   and r.user_gender = #{gender}
+		   and m.match_status = 4
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMainListLocation" resultType="_int">
+    	  select count(*)
+                  from match m, gym g, profile p
+            where m.gym_no = g.gym_no
+            and m.user_id1 = p.user_id
+            and g.gym_address Like '' || #{locations} || '%'
+            and m.match_status = 4
+	</select>
+	
+	<select id="mainListFilterLocation" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and g.gym_address Like '' || #{locations} || '%'
+		   and m.match_status = 4
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMainListNick" resultType="_int">
+      	  select count(*)
+                    from match m, gym g, profile p
+		            where m.gym_no = g.gym_no
+		            and m.user_id1 = p.user_id
+		            and p.pro_nick Like '%' || #{searchInput} || '%'
+		             and m.match_status = 4
+	</select>
+	
+	<select id="mainListFilterNick" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and p.pro_nick Like '%' || #{searchInput} || '%'
+		   and m.match_status = 4
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMainListDow" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and to_char(m.matchdate, 'D') = #{dowInt}
+		   and m.match_status = 4
+	</select>
+	
+	<select id="mainListFilterDow" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and to_char(m.matchdate, 'D') = #{dowInt}
+		   and m.match_status = 4
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMainListReg" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 4
+		   and m.user_id1 = #{userId1}
+	</select>
+	
+	<select id="mainListReg" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 4
+		   and m.user_id1 = #{userId1}
+		 order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMainListChal" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 4
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId2})
+	</select>
+	
+	<select id="mainListChal" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 4
+		    and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId2})
+		  order by m.matchdate, m.matchtime
+	</select>
+	
+	<select id="selectTotalRecordMainListBeforeEnd" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 4
+	</select>
+	
+	<select id="selectTotalRecordMainListAfterEnd" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 5
+	</select>
+	
+	<select id="mainListBeforeEnd" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 4
+	</select>
+	
+	<select id="mainListAfterEnd" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		  where m.gym_no = g.gym_no
+		    and m.user_id1 = p.user_id
+		    and m.match_status = 5
+	</select>
+	
+	<select id="selectPayUser1" resultMap="MatchMap">
+		SELECT USER_ID1
+    	FROM MATCH M
+    	JOIN ALARM A ON M.NO = A.NO
+    	WHERE M.NO = #{no}
+    	AND ALARM_STATUS = 1
+    	AND A.RECEIVER_ID = #{userId}
+	</select>
+	
+	<select id="selectPayUser2" resultMap="MatchMap">
+		SELECT USER_ID2
+    	FROM MATCH M
+    	JOIN ALARM A ON M.NO = A.NO
+    	WHERE M.NO = #{no}
+    	AND ALARM_STATUS = 1
+    	AND A.RECEIVER_ID = #{userId}
+	</select>
+	
+	<update id="updatePay1">
+		UPDATE MATCH
+    	SET 
+    	USER1_PAY = #{user1Pay},
+    	USER1_PAYSTATUS = #{user1Paystatus}
+    	WHERE NO = #{no}
+    	AND USER_ID1 = #{userId1}
+	</update>
+	
+	<update id="updatePay2">
+		UPDATE MATCH
+    	SET 
+    	USER2_PAY = #{user2Pay},
+    	USER2_PAYSTATUS = #{user2Paystatus}
+    	WHERE NO = #{no}
+    	AND USER_ID2 = #{userId2}
+	</update>
+	
+	<select id="selectPayStatus" resultMap="MatchMap">
+		SELECT USER1_PAYSTATUS, USER2_PAYSTATUS
+		FROM MATCH
+		WHERE NO = #{no}
+	</select>
+	
+	<select id="selectStatus0" resultMap="MatchMap">
+		SELECT *
+		FROM MATCH
+		WHERE MATCH_NO = #{matchNo}
+	</select>
+	
+	<update id="updateMatch8">
+		UPDATE MATCH
+		SET
+		MATCH_STATUS = 8
+		WHERE MATCH_NO = #{matchNo}
+		AND USER_ID1 = #{userId1}
+		AND (MATCH_STATUS = 0 OR MATCH_STATUS = 1)
+	</update>
+	
+	<select id="selcUpdMatch" resultMap="MatchMap">
+		SELECT *
+		FROM MATCH
+		WHERE MATCH_NO = #{matchNo}
+		AND USER_ID1 = #{userId1}
+		AND USER_ID2 = #{userId2}
+	</select>
+	
+	<update id="updateUser2Null">
+		UPDATE MATCH
+		SET
+		USER_ID2 = NULL
+		WHERE MATCH_NO = #{matchNo}
+		AND USER_ID1 = #{userId1}
+		AND MATCH_STATUS = 1
+	</update>
+	
+	<select id="selectTotalRecordMatchListAfterChalPay" resultType="_int">
+		select count(*)
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 4
+		   and (m.match_no, m.user_id1) in (select match_no, user_id1
+		                                       from match
+		                                      where user_id2 = #{userId6})
+	</select>
+	
+	<select id="myMatchAfterRegPay" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress, p.pro_nick, p.user_id, m.user_id1, m.match_no, m.score1, m.score2, m.user_id2, m.match_status, m.user1_pay, m.user2_pay, m.user1_paystatus, m.user2_paystatus
+		  from match m, gym g, profile p
+		 where m.gym_no = g.gym_no
+		   and m.user_id1 = p.user_id
+		   and m.match_status = 4
+		   and m.user_id1 = #{userId5}
+		 order by m.no desc
+	</select>
+	
+	
+	<update id="UpdateScore" >
+		update match
+		set	score1 = #{score1},
+				score2 = #{score2},
+				match_status = #{matchStatus}
+		where user_id1 = #{userId1}
+	</update>
+	
+	
+		<select id="selectMatchListView" resultMap="MatchListMap">
+		select m.no, m.matchdate, m.matchtime, g.gym_name, g.gym_address, g.gym_detailaddress,
+       		   p1.pro_nick AS pro_nick, p1.user_id AS user_id1, p2.pro_nick AS pro_nick2, m.user_id2
+		  from match m
+		  join gym g on m.gym_no = g.gym_no
+		  join profile p1 on m.user_id1 = p1.user_id
+		  join profile p2 on m.user_id2 = p2.user_id
+		 where m.match_status = 4
+	</select>
+</mapper>

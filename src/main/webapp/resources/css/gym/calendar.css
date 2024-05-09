@@ -1,0 +1,123 @@
+body {
+	width: 90%;
+	margin: 0 auto;
+}
+
+#container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 30px;
+	margin-right: 100px;
+}
+
+#calendar caption {
+	margin-bottom: 30px;
+	
+}
+
+#calendar select {
+	font-size: 16px;
+}
+
+#calendar table {
+	cellspacing="1";
+}
+
+#calendar a { 
+	text-decoration: none;
+	color: black;
+}
+
+#calendar td:hover {
+	background-color: tomato;
+	font-weight: bold;
+	font-size: 22px;
+}
+
+#calendar h3 {
+	color: tomato;
+	margin-bottom: 30px;
+}
+
+#calendar #box {
+	display: flex;
+	flex-direction: row;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+#calendar #box>div {
+	margin-right: 20px;
+}
+
+#calendar #box>div>div {
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#calendar .box {
+    width: 120px;
+    height: 40px;
+    background-color: #ADA6D6;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#calendar .selected {
+	box-sizing: border-box;
+	border: 5px solid black;
+}
+
+#section {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-itmes: center;
+	width: 1300px;
+}
+
+#schedule {
+	display: flex;
+	flex-direction: column;
+	margin-top: 30px;
+	align-items: center;
+	font-size: 13px;
+}
+
+#button {
+	display: flex;
+	flex-direction: row;
+}
+
+#calendar button {
+	width: 100px;
+	height: 50px;
+	margin-inline: 20px;
+}
+
+#menuNav {
+	margin-left: 63%;
+}
+
+.menuButton {
+	background-color: window;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 15px;
+	font-size: large;
+	color: black;
+}
+
+.menuButton {
+	margin-left: 30px; /* 원하는 간격 크기를 설정합니다 */
+}
+
+.menuButton:hover {
+	background-color: orange;
+	color: white;
+	font-weight: bold;
+}

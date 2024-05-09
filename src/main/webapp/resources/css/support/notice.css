@@ -1,0 +1,209 @@
+body {
+	width: 90%;
+	margin: 0 auto;
+}
+
+#notice {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#notice #mainTitle {
+	width: 1300px;
+	text-align: center;
+}
+
+#notice #noticeTable th {
+	text-align: right;
+	height: 60px;
+}
+
+#notice #noticeButton {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+#notice #noticeButton button {
+	width: 100px;
+	height: 70px;
+	border-width: 0px;
+	border-radius: 30px;
+	margin-inline: 10px;
+}
+
+#notice #noticeButton button:hover {
+	background-color: black;
+	color: rgb(239,239,239);
+}
+
+#notice h2 {
+	font-weight: normal;
+}
+
+
+#notice table {
+	width: 1300px;
+	
+}
+
+#notice #listTable th {
+	font-size: 20px;
+	font-weight: normal;
+	height: 50px;
+	color: white;
+	background-color: tomato;
+}
+
+#notice #listTable td {
+	text-align: center;
+	height: 60px;
+	font-size: 15px;
+}
+
+
+#notice #listTable a {
+	text-decoration: none;
+	color: black;
+}
+
+#notice #detailTable {
+	text-align: right;
+	border-collapse: none;
+}
+
+#notice nav {
+	margin-top: 20px;
+}
+#notice nav a {
+	color: black;
+	text-decoration: none;
+	
+}
+
+#notice nav li {
+	text-decoration: none;
+	list-style: none;
+	float: left;
+}
+
+#notice #detailTable th {
+	text-align: right;
+	height: 50px;
+}
+
+#notice #detailTable td {
+	text-align: left;
+}
+
+#notice #detailButton button {
+	width: 100px;
+	height: 70px;
+	border-width: 0px;
+	border-radius: 30px;
+	
+}
+
+#notice #detailButton button:hover {
+	background-color: black;
+	color: rgb(239,239,239);
+}
+
+#notice #detailFile {
+	size = 200;
+}
+
+#notice #content {
+	background-color: white;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	font-family: normal;
+}
+
+#notice #subInfo {
+	display: flex;
+	flex-direction: column;
+}
+
+#notice #subInfo>div {
+	height: 40px;
+}
+
+#notice #fileDiv button {
+	width: 300px;
+	height: 30px;
+	border-width: 0px;
+	border-radius: 30px;
+	margin-right: 30px;
+}
+
+#notice #fileDiv button:hover {
+	background-color: black;
+	color: rgb(239,239,239);
+}
+
+#notice #noticeDetailButton {
+	width: 100px;
+	height: 70px;
+	border-width: 0px;
+	border-radius: 30px;
+}
+
+#notice #noticeDetailButton:hover {
+	background-color: black;
+	color: rgb(239,239,239);
+}
+
+#notice #noticeTitle {
+	margin-bottom: 30px;
+}
+
+#notice #textarea {
+	border-width: 0;
+	resize: none;
+	overflow: visible;
+}
+
+
+#notice #textarea:focus {
+	outline: none;
+}
+
+#menuNav {
+	margin-left: 60%;
+}
+
+.menuButton {
+	background-color: window;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 15px;
+	font-size: large;
+}
+
+.menuButton {
+	margin-left: 30px; /* 원하는 간격 크기를 설정합니다 */
+}
+
+.menuButton:hover {
+	background-color: orange;
+	color: white;
+	font-weight: bold;
+}
+
+#listButton button {
+	width: 70px;
+	height: 40px;
+	border-radius: 20px;
+	border: none;
+	cursor: pointer;
+}
+
+#listButton button:hover {
+	background-color: tomato;
+	color: white;
+}

@@ -1,0 +1,49 @@
+.matchListView table {
+	width: 100%;
+	border-collapse: collapse;
+	padding: 10px;
+	border-radius: 20px;
+}
+
+.matchListView th, td {
+	border: 1px solid #ccc;
+	text-align: center;
+}
+
+.matchListView th {
+	padding: 15px;
+	text-align: center;
+	background-color: #f2f2f2;
+}
+
+.matchListView td {
+	padding: 20px;
+}
+
+.matchListView h1 {
+	text-align: center;
+}
+
+
+#menuNav {
+	margin-left: 70%;
+}
+
+.menuButton {
+	background-color: window;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 15px;
+	font-size: large;
+}
+
+.menuButton {
+	margin-left: 30px; /* 원하는 간격 크기를 설정합니다 */
+}
+
+.menuButton:hover {
+	background-color: orange;
+	color: white;
+	font-weight: bold;
+}

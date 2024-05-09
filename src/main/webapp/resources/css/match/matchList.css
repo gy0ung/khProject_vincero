@@ -1,0 +1,194 @@
+body {
+	width: 90%;
+	margin: 0 auto;
+}
+
+#matchList {
+	background-image: url("../../img/ranking/ring3.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0 auto;
+    width: 1300px;
+    height: 1400px;
+}
+
+#matchList #game {
+    background-color: rgba(0,0,20,0.3);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 7px 15px 8px rgba(0,0,0,0.1);
+    color: white;
+   	font-size: 13px;
+   	width: 90%;
+   	height: 80%;
+   	
+}
+
+#matchList table {
+	width: 90%;
+	border-spacing: 0px;
+}
+
+#matchList #table {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+#matchList table th {
+	 background-color: rgba(0,0,128,0);
+	 height: 60px;
+	 font-size: 25px;
+	 color: black;
+	 text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
+}
+
+#matchButton button {
+	color: white;
+	background-color: rgba(0,78,128,0.5);
+	border-radius: 30px;
+	border-width: 0px;
+	font-size: 15px;
+	margin-inline: 5px;
+}
+
+#matchButton {
+	display: flex;
+	align-items: bottom;
+	margin-left: 40px;
+	
+}
+
+#matchList td {
+	height: 100px;
+	text-align: center;
+	background-color: rgba(0,0,128,0);
+}
+
+#matchList tbody tr:hover {
+	background-color: rgba(0,0,20,0.2);
+}
+
+#matchList button {
+	color: white;
+	background-color: rgba(0,78,128,0.5);
+	border-radius: 30px;
+	border-width: 0px;
+	padding: 20px;
+}
+
+#matchButton button:hover {
+	font-size: 13px;
+	color: black;
+	font-weight: bold;
+	text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
+}
+
+#matchList button:hover {
+	font-size: 13px;
+	color: black;
+	font-weight: bold;
+	text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 11px #f80, 2px -19px 18px #f20;
+}
+
+#matchList button:active {
+	font-size: 13px;
+}
+
+#matchList nav {
+	margin-top: 50px;
+}
+#matchList nav a {
+	color: white;
+	text-decoration: none;
+	background-color: rgba(0,78,128,0.5);
+	margin-inline: 10px;
+	padding: 30px;
+	font-size: 20px;
+	
+}
+
+#matchList nav li {
+	text-decoration: none;
+	list-style: none;
+	float: left;
+}
+
+#filter {
+	display: flex;
+	flex-direction: row;
+}
+
+#matchList select, input {
+	font-size: 12px;
+	background-color: rgba(255,255,255,0.5);
+	border-width: 0px;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+#matchList select {
+	margin-inline: 5px;
+}
+
+#matchList select:hover {
+	background-color: rgba(255,255,255,1);
+}
+
+
+#matchList input {
+	margin-inline: 3px;
+}
+
+#upperStuff {
+	display: flex;
+	flex-direction: row;
+	flex-direciont: center;
+	margin-bottom: 10px;
+}
+
+#search {
+	margin-left: 40px;
+	margin-right: 40px;
+	display: flex;
+	align-itmes: bottom;
+}
+
+#search input:hover {
+	background-color: rgba(255,255,255,1);
+}
+
+#view {
+	display: flex;
+	align-items: bottom;
+}
+
+#view input:hover {
+	background-color: rgba(255,255,255,1);
+}
+
+<!-- 상단 메뉴바 -->
+
+
+.menuButton {
+	background-color: window;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 15px;
+	font-size: large;
+}
+
+.menuButton {
+	margin-left: 30px; /* 원하는 간격 크기를 설정합니다 */
+}
+
+.menuButton:hover {
+	background-color: orange;
+	color: white;
+	font-weight: bold;
+}

@@ -1,0 +1,177 @@
+body {
+	width: 90%;
+	margin: 0 auto;
+}
+
+#rankingList {
+	background-image: url("../../img/ranking/rankingImage.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0 auto;
+    width: 1300px;
+    height: 1400px;
+}
+
+#rankingList #rankingTable {
+    background-color: rgba(0,0,20,0.3);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 7px 15px 8px rgba(0,0,0,0.1);
+    color: white;
+   	font-size: 13px;
+   	width: 90%;
+   	height: 80%;
+   	
+}
+
+#rankingList table {
+	width: 90%;
+	border-spacing: 0px;
+}
+
+#rankingList #table {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+#rankingList table th {
+	 background-color: rgba(0,0,128,0.1);
+	 height: 50px;
+	 font-size: 25px;
+	 color: white;
+	
+}
+
+#rankingButton button {
+	color: white;
+	background-color: rgba(0,78,128,0.5);
+	border-radius: 30px;
+	border-width: 0px;
+	font-size: 15px;
+	margin-inline: 5px;
+}
+
+#rankingButton {
+	display: flex;
+	align-items: bottom;
+	margin-left: 40px;
+	
+}
+
+#rankingList td {
+	height: 100px;
+	text-align: center;
+	background-color: rgba(0,0,128,0);
+}
+
+#rankingList tbody tr:hover {
+	background-color: rgba(0,0,20,0.2);
+}
+
+#rankingList button {
+	color: white;
+	background-color: rgba(0,78,128,0.5);
+	border-radius: 30px;
+	border-width: 0px;
+	padding: 20px;
+}
+
+#rankingButton button:hover {
+	font-size: 13px;
+	color: black;
+	font-weight: bold;
+	text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff1, 2px -10px 6px #fd3, -2px -15px 11px #f90, 2px -19px 18px #f30;
+}
+
+#rankingList button:hover {
+	font-size: 13px;
+	color: black;
+	font-weight: bold;
+	text-shadow: 0 0 4px #ccc, 0 -5px 4px #ff1, 2px -10px 6px #fd3, -2px -15px 11px #f90, 2px -19px 18px #f30;
+}
+
+#rankingList button:active {
+	font-size: 13px;
+}
+
+#rankingList nav {
+	margin-top: 50px;
+}
+#rankingList nav a {
+	color: white;
+	text-decoration: none;
+	background-color: rgba(255,255,255,0.5);
+	margin-inline: 10px;
+	padding: 10px;
+	font-size: 20px;
+}
+
+#rankingList a {
+	color: white;
+	text-decoration: none;
+}
+
+#rankingList nav li {
+	text-decoration: none;
+	
+	list-style: none;
+	float: left;
+}
+
+#filter {
+	display: flex;
+	flex-direction: row;
+}
+
+#rankingList select, input {
+	font-size: 12px;
+	background-color: rgba(255,255,255,0.5);
+	border-width: 0px;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+#rankingList select {
+	margin-inline: 5px;
+}
+
+#rankingList select:hover {
+	background-color: rgba(255,255,255,1);
+}
+
+
+#rankingList input {
+	margin-inline: 3px;
+}
+
+#upperStuff {
+	display: flex;
+	flex-direction: row;
+	flex-direciont: center;
+	margin-bottom: 10px;
+}
+
+#search {
+	margin-left: 40px;
+	margin-right: 40px;
+	display: flex;
+	align-itmes: bottom;
+}
+
+#search input:hover {
+	background-color: rgba(255,255,255,1);
+}
+
+#view {
+	display: flex;
+	align-items: bottom;
+}
+
+#view input:hover {
+	background-color: rgba(255,255,255,1);
+}

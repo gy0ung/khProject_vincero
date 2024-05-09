@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kh.spring.support.model.dao.SupportDao">
+<resultMap type="question" id="questionMap"></resultMap>
+	
+	<select id="selectQuestionList" resultMap="questionMap">
+		select *
+		  from question
+		 order by ref desc, question_no asc
+
+	</select>
+	
+	<select id="selectTotalRecordQuestion" resultType="_int">
+		select count(*)
+		  from question
+	</select>
+	
+	<insert id="insertQuestion">
+		insert into question
+		values(
+			seq_question_no.nextval,
+			#{questionTitle},
+			#{questionWriter},
+			#{content},
+			#{originalFilename},
+			#{changeFilename},
+			default,
+			default,
+			default,
+			seq_question_no.nextval,
+			default,
+			#{userId}
+		)
+	</insert>
+	
+	<insert id="insertQuestionAnswer">
+		insert into question
+		values(
+			seq_question_no.nextval,
+			#{questionTitle},
+			#{questionWriter},
+			#{content},
+			#{originalFilename},
+			#{changeFilename},
+			default,
+			default,
+			#{questionStatus},
+			#{ref},
+			#{depth},
+			#{userId}
+		)
+	</insert>
+	
+	<update id="updateCountQuestion">
+		update question
+		   set count = count + 1
+		 where question_no = #{questionNo}  
+	</update>
+	
+	<select id="selectOneQuestion" resultMap="questionMap">
+		select *
+		  from question
+		 where question_no = #{questionNo} 
+	</select>
+	
+	<update id="updateQuestion">
+		update question
+		   set question_title = #{questionTitle},
+		   	   content = #{content},
+		   	   original_filename = #{originalFilename},
+		   	   change_filename = #{changeFilename}
+		 where question_no = #{questionNo}
+	</update>
+	
+	<update id="updateQuestionWithoutFile">
+		update question
+		   set question_title = #{questionTitle},
+		   	   content = #{content}
+		 where question_no = #{questionNo}
+	</update>
+	
+	<delete id="deleteQuestion">
+		delete from question
+		 where question_no = #{questionNo}
+	</delete>
+	
+	<delete id="deleteQuestionWithReply">
+		delete from question
+		 where ref = #{ref}
+	</delete>
+	
+	<update id="updateQuestionStatus">
+		update question
+		   set question_status = '1'
+		 where question_no = #{refFromReply}
+	</update>
+	
+	<select id="selectSearchQuestionId" resultMap="questionMap">
+		select *
+		  from question
+		 where question_writer = #{searchInput}
+		 order by ref desc, question_no asc
+	</select>
+	
+	<select id="selectSearchQuestionTitle" resultMap="questionMap">
+		select *
+		  from question
+		 where ref in (select ref
+				 from question
+				where question_title Like '%'||#{searchInput}||'%')
+		 order by ref desc, question_no asc
+		
+	</select>
+	
+	<select id="selectSearchQuestionContent" resultMap="questionMap">
+		select *
+		  from question
+		 where content Like '%'||#{searchInput}||'%'
+		 order by ref desc, question_no asc
+	</select>
+	
+	<select id="selectSearchQuestionStatus" resultMap="questionMap">
+		select *
+		  from question
+		 where question_status = #{searchInput}
+		 order by ref desc, question_no asc
+	</select>
+	
+	<update id="backQuestionStatus">
+		update question
+		   set question_status = '0'
+		 where question_no = #{ref}
+	</update>
+	
+</mapper>

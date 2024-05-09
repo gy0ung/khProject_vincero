@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.kh.spring.ranking.model.dao.RankingDao">
+	<resultMap type="Ranking" id="RankingMap"></resultMap>
+	<resultMap type="RankingList" id="RankingListMap"></resultMap>
+
+	<select id="decisionRankReg" resultType="_int">
+		select count(*)
+		  from ranking
+		 where user_id = #{userId}
+	</select>
+	
+	<insert id="rankReg">
+		insert into ranking
+			values(
+				seq_ranking_no.nextval,
+				#{matchCount},
+				#{winCount},
+				#{loseCount},
+				#{point},
+				#{userId}
+			)
+	</insert>
+	
+	<select id="getRankingData" resultMap="RankingMap">
+		select *
+		  from ranking
+		 where user_id = #{userId}
+	
+	</select>
+	
+	<update id="rankUpdate">
+		update ranking
+		   set match_count = #{matchCount},
+			   win_count = #{winCount},
+			   lose_count = #{loseCount},
+			   point = #{point}
+		 where ranking_no = #{rankingNo}
+	</update>
+	
+	<select id="selectTotalRecordRankingList" resultType="_int">
+		select count(*)
+		  from ranking
+	</select>
+	
+	<select id="selectRankingList" resultMap="RankingListMap">
+		select rank() over (order by r.point desc) as rankingNumber, p.pro_nick, p.pro_major, r.match_count, r.win_count, r.lose_count, r.point, r.user_id
+		  from ranking r, profile p
+		 where r.user_id = p.user_id
+		 order by r.point desc
+	</select>
+	
+	<select id="selectTotalRecordRankingListGender" resultType="_int">
+      	select count(*)
+		  from ranking r, profile p, member m
+		 where r.user_id = p.user_id
+		   and r.user_id = m.user_id
+		   and m.user_gender = #{gender}
+	</select>
+	
+	<select id="rankingListFilterGender" resultMap="RankingListMap">
+		select p.pro_nick, p.pro_major, r.match_count, r.win_count, r.lose_count, r.point, r.user_id
+		  from ranking r, profile p, member m
+		 where r.user_id = p.user_id
+		   and r.user_id = m.user_id
+		   and m.user_gender = #{gender}
+		 order by r.point desc
+	</select>
+	
+	<select id="selectTotalRecordRankingListMajor" resultType="_int">
+      	select count(*)
+		  from ranking r, profile p
+		 where r.user_id = p.user_id
+		   and p.pro_major = #{major}
+		 order by r.point desc
+	</select>
+	
+	<select id="rankingListFilterMajor" resultMap="RankingListMap">
+		select p.pro_nick, p.pro_major, r.match_count, r.win_count, r.lose_count, r.point, r.user_id
+		  from ranking r, profile p
+		 where r.user_id = p.user_id
+		   and p.pro_major = #{major}
+		 order by r.point desc
+	</select>
+	
+	<select id="selectTotalRecordRankingListNick" resultType="_int">
+      	select count(*)
+		  from ranking r, profile p
+		 where r.user_id = p.user_id
+		   and p.pro_nick Like '%' || #{searchInput} || '%'
+		 order by r.point desc
+	</select>
+	
+	<select id="rankingListFilterNick" resultMap="RankingListMap">
+		select p.pro_nick, p.pro_major, r.match_count, r.win_count, r.lose_count, r.point, r.user_id
+		  from ranking r, profile p
+		 where r.user_id = p.user_id
+		   and p.pro_nick Like '%' || #{searchInput} || '%'
+		 order by r.point desc
+	</select>
+	
+	<select id="myRanking" resultType="_int">
+		select count(*)
+		  from ranking r, profile p
+		 where r.user_id = p.user_id
+		   and r.user_id = #{userId}
+		 order by r.point desc
+	</select>
+	
+	<select id="rankingListmyRanking" resultMap="RankingListMap">
+		select p.pro_nick, p.pro_major, r.match_count, r.win_count, r.lose_count, r.point, r.user_id
+		  from ranking r, profile p
+		 where r.user_id = p.user_id
+		   and r.user_id = #{userId}
+		 order by r.point desc
+	</select>
+</mapper>

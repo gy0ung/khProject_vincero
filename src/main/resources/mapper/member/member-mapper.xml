@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kh.spring.member.model.dao.MemberDao">
+	<resultMap type="member" id="memberMap"></resultMap>
+
+	<insert id="insertMember">
+		insert into member
+		values (
+		#{userId},
+		#{userPw},
+		#{userRnn},
+		#{userName},
+		#{userGender},
+		#{userEmail},
+		#{phone},
+		#{zipcode},
+		#{address},
+		#{detailaddress},
+		default,
+		default,
+		default,
+		default,
+		default
+		)
+	</insert>
+
+
+	<select id="selectOneMember" resultMap="memberMap"> select user_id, 
+		user_pw,substr(user_rnn,1,8)||'******' as user_rnn, user_name, user_gender, user_email, 
+		phone, zipcode, address, detailaddress, user_type, user_status from member where user_id=#{userId} 
+		</select>
+	<!-- <select id="selectOneMember" resultMap="memberMap">
+		select *
+		from member
+		where
+		user_id = #{userId}
+	</select> -->
+
+	<update id="updateMember">
+		  <!-- Update member table -->
+		  UPDATE member
+		  SET
+		    user_pw = #{userPw},
+		    phone = #{phone},
+		    user_email = #{userEmail},
+		    zipcode = #{zipcode},
+		    address = #{address},
+		    detailaddress = #{detailaddress}
+		  WHERE user_id = #{userId}
+	</update>
+
+	<update id="pwupdateMember">
+		update member
+		set
+		user_pw = #{userPw}
+		where user_id = #{userId}
+	</update>
+
+	<select id="selectTwoMember" resultMap="memberMap">
+		select *
+		from member
+		where
+		user_Email = #{userEmail}
+	</select>
+
+
+
+	<delete id="deleteMember">
+		delete
+		from member
+		where user_id = #{userId}
+	</delete>
+	
+   <update id="statusUpdate">
+      update member
+         set
+         user_status = 2
+      where user_id = #{userId}
+   </update> 
+	
+	
+    <select id="findUserIdByEmail" resultType="java.lang.String">
+        SELECT user_id
+        FROM member
+        WHERE user_email = #{userEmail}
+    </select>
+	
+	<update id="mnStatusUpdate">
+      update member
+         set user_type = 'coach'
+       where user_id in ( select m.user_id
+                         from gym g
+                      inner join member m on g.user_id = m.user_id
+                      where g.gym_status = 2) 
+       and user_type != 'coach'
+   </update>
+</mapper>

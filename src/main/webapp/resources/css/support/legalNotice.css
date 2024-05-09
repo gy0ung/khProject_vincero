@@ -1,0 +1,16 @@
+#legalNotice {
+	width: 60%;
+	margin:0 auto;
+}
+#legalNotice h3{
+	text-align: center;
+	padding-top: 20px;
+	padding-bottom: 10px;
+}
+
+#legalNotice p {
+	padding: 20px;
+}
+#legalNotice h1 {
+	text-align: center;
+}
