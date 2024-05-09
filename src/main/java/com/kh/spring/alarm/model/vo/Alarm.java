@@ -18,6 +18,5 @@ public class Alarm {
 	private String readYn;
 	private int alarmStatus;
 	private int no;
-	/////////////////
 	private String alarmTime2;
 }
